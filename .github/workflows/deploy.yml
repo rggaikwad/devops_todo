@@ -16,13 +16,13 @@ jobs:
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.rggaikwad17 }}
-          password: ${{ secrets.pass@1234 }}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and Push Docker Image
         run: |
-          docker build -t ${{ secrets.rggaikwad17 }}/todo-app:latest .
-          docker push ${{ secrets.rggaikwad17 }}/todo-app:latest
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/todo-app:latest .
+          docker push ${{ secrets.DOCKER_USERNAME }}/todo-app:latest
 
   deploy:
     runs-on: ubuntu-latest
@@ -31,8 +31,8 @@ jobs:
     steps:
       - name: Deploy to Server
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.ubuntu }}@${{ secrets.51.20.83.243 }} << 'EOF'
-            docker pull ${{ secrets.rggaikwad17 }}/todo-app:latest
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+            docker pull ${{ secrets.DOCKER_USERNAME }}/todo-app:latest
             docker-compose down
             docker-compose up -d
           EOF
