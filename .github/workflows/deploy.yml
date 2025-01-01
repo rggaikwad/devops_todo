@@ -1,0 +1,38 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.rggaikwad17 }}
+          password: ${{ secrets.pass@1234 }}
+
+      - name: Build and Push Docker Image
+        run: |
+          docker build -t ${{ secrets.rggaikwad17 }}/todo-app:latest .
+          docker push ${{ secrets.rggaikwad17 }}/todo-app:latest
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Deploy to Server
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.ubuntu }}@${{ secrets.51.20.83.243 }} << 'EOF'
+            docker pull ${{ secrets.rggaikwad17 }}/todo-app:latest
+            docker-compose down
+            docker-compose up -d
+          EOF
